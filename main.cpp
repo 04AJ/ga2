@@ -5,7 +5,6 @@
 #include <algorithm>
 #include "ArgumentManager.h"
 #include "stack.h"
-#include "stack.cpp"
 using namespace std;
 
 string decode(string input);
