@@ -8,7 +8,6 @@
 #include "stack.h"
 using namespace std;
 
-string decode(string input);
 bool orderP(string s);
 bool validP(string a);
 bool doubleP(string a);
