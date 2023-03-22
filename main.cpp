@@ -4,13 +4,14 @@
 #include <string>
 #include <algorithm>
 #include <list>
+#include <stack>
 #include "ArgumentManager.h"
-#include "stack.h"
 using namespace std;
 
 bool orderP(string s);
 bool validP(string a);
 bool doubleP(string a);
+int priority(char c);
 void print(list<string> valid, list<string> invalid, ofstream &output);
 
 
@@ -123,4 +124,23 @@ void print(list<string> valid, list<string> invalid, ofstream &output){
     cout << "Invalid" << endl;
     for(string node : invalid)
         cout << node << endl;
+}
+
+int priority(char c)
+{
+    int num = 0;
+    switch (c)
+    {
+    case '{':
+        num = 3;
+        break;
+    case '[':
+        num = 2;
+        break;
+    case '(':
+        num = 1;
+        break;
+    }
+
+    return num;
 }
