@@ -14,26 +14,27 @@ bool doubleP(string a);
 int priority(char c);
 void print(list<string> valid, list<string> invalid, ofstream &output);
 
-
 int main(int argc, char *argv[])
 {
     ArgumentManager an(argc, argv);
     const string input = an.get("input");
     const string output = an.get("output");
-    // ifstream inputfile(input);
-    // ofstream outfile(output);
+    ifstream inputfile(input);
+    ofstream outfile(output);
 
     // Delete when done
-    ifstream inputfile("input1.txt");
-    ofstream outfile("output.txt");
+    // ifstream inputfile("input3.txt");
+    // ofstream outfile("output.txt");
 
     string tmpstr = "";
     bool isValid = false;
     list<string> valid = {};
     list<string> invalid = {};
 
-    while (getline(inputfile, tmpstr)){
-        if (orderP(tmpstr) && validP(tmpstr) && doubleP(tmpstr))
+    while (getline(inputfile, tmpstr))
+    {
+        // cout << tmpstr << "---> Order:" << orderP(tmpstr) << " Valid:" << validP(tmpstr) << " Double:" << doubleP(tmpstr) << endl;
+        if (orderP(tmpstr) && validP(tmpstr) && !doubleP(tmpstr))
             valid.push_back(tmpstr);
         else
             invalid.push_back(tmpstr);
@@ -70,7 +71,7 @@ bool doubleP(string a)
         }
     }
     return false;
-
+}
 
 bool orderP(string s)
 {
@@ -87,7 +88,6 @@ bool orderP(string s)
 
     return true;
 }
-
 
 bool validP(string a)
 {
@@ -126,24 +126,21 @@ bool validP(string a)
     return str.empty();
 }
 
-
-
-void print(list<string> valid, list<string> invalid, ofstream &output){
+void print(list<string> valid, list<string> invalid, ofstream &output)
+{
     // write to output file
-    output << "Valid" << endl;
-    for (string node : valid)
-        output << node << endl;
-    output << "Invalid" << endl;
-    for(string node : invalid)
-        output << node << endl;
-
-    // print
-    cout << "Valid" << endl;
-    for (string node : valid)
-        cout << node << endl;
-    cout << "Invalid" << endl;
-    for(string node : invalid)
-        cout << node << endl;
+    if (!valid.empty())
+    {
+        output << "Valid" << endl;
+        for (string node : valid)
+            output << node << endl;
+    }
+    if (!invalid.empty())
+    {
+        output << "Invalid" << endl;
+        for (string node : invalid)
+            output << node << endl;
+    }
 }
 
 int priority(char c)
