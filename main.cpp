@@ -8,7 +8,12 @@
 #include "ArgumentManager.h"
 using namespace std;
 
-string decode(string input);
+bool orderP(string s);
+bool validP(string a);
+bool doubleP(string a);
+int priority(char c);
+void print(list<string> valid, list<string> invalid, ofstream &output);
+
 
 int main(int argc, char *argv[])
 {
@@ -18,9 +23,26 @@ int main(int argc, char *argv[])
     // ifstream inputfile(input);
     // ofstream outfile(output);
 
+    // Delete when done
     ifstream inputfile("input1.txt");
     ofstream outfile("output.txt");
 
+    string tmpstr = "";
+    bool isValid = false;
+    list<string> valid = {};
+    list<string> invalid = {};
+
+    while (getline(inputfile, tmpstr)){
+        if (orderP(tmpstr) && validP(tmpstr) && doubleP(tmpstr))
+            valid.push_back(tmpstr);
+        else
+            invalid.push_back(tmpstr);
+    }
+
+    print(valid, invalid, outfile);
+
+    inputfile.close();
+    outfile.close();
     return 0;
 }
 
@@ -48,4 +70,97 @@ bool doubleP(string a)
         }
     }
     return false;
+
+
+bool orderP(string s)
+{
+    stack<char> st;
+    for (int i = 0; i < s.size(); i++)
+    {
+        if (s.at(i) == '{' || s.at(i) == '[' || s.at(i) == '(')
+        {
+            if (!st.empty() && (priority(st.top()) < priority(s.at(i))))
+                return false;
+            st.push(s.at(i));
+        }
+    }
+
+    return true;
+}
+
+
+bool validP(string a)
+{
+    stack<char> str;
+    for (int i = 0; i < a.length(); i++)
+    {
+        if (a[i] == '(' || a[i] == '[' || a[i] == '{')
+        {
+            str.push(a[i]);
+        }
+        else if (a[i] == ')')
+        {
+            if (str.empty() || str.top() != '(')
+            {
+                return false;
+            }
+            str.pop();
+        }
+        else if (a[i] == ']')
+        {
+            if (str.empty() || str.top() != '[')
+            {
+                return false;
+            }
+            str.pop();
+        }
+        else if (a[i] == '}')
+        {
+            if (str.empty() || str.top() != '{')
+            {
+                return false;
+            }
+            str.pop();
+        }
+    }
+    return str.empty();
+}
+
+
+
+void print(list<string> valid, list<string> invalid, ofstream &output){
+    // write to output file
+    output << "Valid" << endl;
+    for (string node : valid)
+        output << node << endl;
+    output << "Invalid" << endl;
+    for(string node : invalid)
+        output << node << endl;
+
+    // print
+    cout << "Valid" << endl;
+    for (string node : valid)
+        cout << node << endl;
+    cout << "Invalid" << endl;
+    for(string node : invalid)
+        cout << node << endl;
+}
+
+int priority(char c)
+{
+    int num = 0;
+    switch (c)
+    {
+    case '{':
+        num = 3;
+        break;
+    case '[':
+        num = 2;
+        break;
+    case '(':
+        num = 1;
+        break;
+    }
+
+    return num;
 }
