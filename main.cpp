@@ -46,6 +46,31 @@ int main(int argc, char *argv[])
     return 0;
 }
 
+bool doubleP(string a)
+{
+    stack<char> st;
+    for (int i = 0; i < a.length(); i++)
+    {
+        // pushes if opening
+        if (a.at(i) == ')' || a.at(i) == ']' || a.at(i) == '}')
+        {
+            if (st.top() == '(' || st.top() == '[' || st.top() == '{')
+            {
+                return true;
+            }
+            while (st.top() != '(' && st.top() != '[' && st.top() != '{')
+            {
+                st.pop();
+            }
+            st.pop();
+        }
+        else
+        {
+            st.push(a.at(i));
+        }
+    }
+    return false;
+
 
 bool orderP(string s)
 {
@@ -101,11 +126,6 @@ bool validP(string a)
     return str.empty();
 }
 
-
-bool doubleP(string a){
-    // TODO
-    return true;
-}
 
 
 void print(list<string> valid, list<string> invalid, ofstream &output){
