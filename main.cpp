@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
     ofstream outfile(output);
 
     // Delete when done
-    // ifstream inputfile("input3.txt");
+    // ifstream inputfile("input4.txt");
     // ofstream outfile("output.txt");
 
     string tmpstr = "";
@@ -33,8 +33,7 @@ int main(int argc, char *argv[])
 
     while (getline(inputfile, tmpstr))
     {
-        // cout << tmpstr << "---> Order:" << orderP(tmpstr) << " Valid:" << validP(tmpstr) << " Double:" << doubleP(tmpstr) << endl;
-        if (orderP(tmpstr) && validP(tmpstr) && !doubleP(tmpstr))
+        if (validP(tmpstr) && orderP(tmpstr) && !doubleP(tmpstr))
             valid.push_back(tmpstr);
         else
             invalid.push_back(tmpstr);
@@ -45,32 +44,6 @@ int main(int argc, char *argv[])
     inputfile.close();
     outfile.close();
     return 0;
-}
-
-bool doubleP(string a)
-{
-    stack<char> st;
-    for (int i = 0; i < a.length(); i++)
-    {
-        // pushes if opening
-        if (a.at(i) == ')' || a.at(i) == ']' || a.at(i) == '}')
-        {
-            if (st.top() == '(' || st.top() == '[' || st.top() == '{')
-            {
-                return true;
-            }
-            while (st.top() != '(' && st.top() != '[' && st.top() != '{')
-            {
-                st.pop();
-            }
-            st.pop();
-        }
-        else
-        {
-            st.push(a.at(i));
-        }
-    }
-    return false;
 }
 
 bool orderP(string s)
@@ -84,9 +57,39 @@ bool orderP(string s)
                 return false;
             st.push(s.at(i));
         }
+        else if (!st.empty() && (s.at(i) == '}' || s.at(i) == ']' || s.at(i) == ')'))
+        {
+            st.pop();
+        }
     }
 
     return true;
+}
+
+bool doubleP(string a)
+{
+    stack<char> st;
+    for (int i = 0; i < a.length(); i++)
+    {
+        // pushes if opening
+        if (a.at(i) == ')' || a.at(i) == ']' || a.at(i) == '}')
+        {
+            if (!st.empty() && (st.top() == '(' || st.top() == '[' || st.top() == '{'))
+            {
+                return true;
+            }
+            while (!st.empty() && (st.top() != '(' && st.top() != '[' && st.top() != '{'))
+            {
+                st.pop();
+            }
+            st.pop();
+        }
+        else
+        {
+            st.push(a.at(i));
+        }
+    }
+    return false;
 }
 
 bool validP(string a)
